@@ -1,6 +1,6 @@
 #! /bin/bash
 
-DEBUG=true
+DEBUG=${DEBUG:-false}
 progn="${0##*/}"    # basename
 logf="/tmp/$progn.log"  # logfile
 
