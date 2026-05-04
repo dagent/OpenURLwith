@@ -1,7 +1,7 @@
 
 # OpenURLwith
 
-An HTTP(S) mime-type browser-chooser "system" for Linux desktops.
+An HTTP(S) mime-type browser-chooser "system" for Linux desktops.  Really, it's just 2 files and some instructions...
 
 ## The Problem to solve
 
@@ -15,15 +15,15 @@ pick my web application.  I'm going to call that _OpenURLwith_.
 
 ###  Even more features (in the future)
 
-**Profiles:** It would be great to select which profile to open a
-website with -- I use profiles in both FireFox and Chrome.
+**Private/Guest:** Check box -- Just open in a completely non-Profile window.
 
-**Private/Guest:** Or, just open in a completely non-Profile window.
+**Profiles:** Drop down -- It would be great to select which profile to open a
+website with -- I use profiles in both FireFox and Chrome.
 
 ## Requirements
 
 Development done using Linux Mint MATE 22.3 and Debian 13 Mate.  My
-guess/hope is that any mondernish freedesktop.org "compliant"[^1]
+guess/hope is that any mondernish freedesktop.org "compliant"
 Linux should work.
 
 * BASH
@@ -31,37 +31,33 @@ Linux should work.
   how I installed it.  Repository versions are quite old, but seem to
   work well enough for this purpose.
 
-[^1] I really don't know if "compliant" is even appropriate here.  
-
 ## Installation
+
+#### 1. Download/save the **OpenURLwith** script and **OpenURLwith.desktop**:
 
 Put the **OpenURLwith** script someplace in your $PATH, and make
 executable.  I leave mine in ~/bin:
 
 `cp OpenURLwith $HOME/bin; chmod 755 $HOME/bin/OpenURLwith`
 
-You should be able to run this from the command line -- it will open
-blank windows if not given a URL.
+#### 2.  Run `OpenURLwith` from the command line -- it will open blank windows if not given a URL:
 
-### Copy the desktop file:
+Trouble shoot this if it doesn't work!  Is **OpenURLwith** executable and in your **$PATH**?  Is YAD installed correctly?
+
+#### 3. Install the desktop file:
+
 `cp OpenURLwith.desktop $HOME/.local/share/applications`
 
-Open this file in an editor and make sure the Exec portion points to a
-valid executable.  Double click, and see if it launches, or if you have
-to mark it "trusted" (which you should do).  *This is often the hardest
-thing to get working right*. Consider (for xfce):
-```
-f="$HOME/.local/share/applications/OpenURLwith.desktop"
-gio set -t string "$f" metadata::xfce-exe-checksum "$(sha256sum "$f" | awk '{print $1}')"
-```
-... which might be needed 
+In a GUI file browser, navigate to that file, double click on it, and do whatever your desktop environment requires to "trust" it for launching. 
+
+*This is often the hardest thing to get working right*.
 
 Possibly may need to register the file:
 `update-desktop-database ~/.local/share/applications`
 
 At this point, you should be able to see **OpenURLwith** in your
-Desktop's application menu, and possibly as an option in a
-*default/preferred application* setting.
+Desktop's application menu, and hopefully as an option in a
+*default/preferred application* setting for your Desktop Environment.
 
 If you need to force it as the default browser, this should work:
 `xdg-settings set default-web-browser OpenURLwith.desktop`
@@ -70,6 +66,8 @@ If you need to force it as the default browser, this should work:
 
 The only real configuration involves editing the **OpenURLwith** script.
 Namely, adding/removing *Launchers* definitions and invocations. 
+
+The `.desktop` file has an *Exec* line -- the debugging flag might be set, and can be edited out.
 
 ## Testing
 

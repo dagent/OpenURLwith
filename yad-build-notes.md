@@ -1,5 +1,6 @@
 
 ### Building YAD
+(This was initially done on Mint 22.3)
 
 Find an appropriate directory, then
 ```

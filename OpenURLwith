@@ -1,11 +1,14 @@
 #! /bin/bash
 
-DEBUG=${DEBUG:-false}
 progn="${0##*/}"    # basename
 logf="/tmp/$progn.log"  # logfile
 
+
+DEBUG=${DEBUG:-false}
+[ "$1" = "-d" ] && { DEBUG=true ; shift ; }
+
 # check for tty, otherwise output to log file
-[ -t 1 ] || exec > "$logf" 2>&1
+[ -t 1 ] || exec >> "$logf" 2>&1
 
 usage () {
     cat <<_EOL_
@@ -22,13 +25,16 @@ _EOL_
 pd () {
     $DEBUG && echo -ne "[DEBUG] $@\n" 
 }
+pd $(printf "\n---\n%(%Y%m%d-%H%M%S)T\n---" -1)
 
-# Argument Handling
+# Basic argument Handling
 case $1 in
     -*) usage ;;
     '') export URL="about:blank"  ;;
     *) export URL="$1"  ;;
 esac
+
+pd "URL: >>>\n\t$URL\n<<<"
 
 # Launchers -- definitions
 l_firefox() { firefox --new-window "$URL" ; } ; export -f l_firefox
@@ -36,6 +42,7 @@ l_chrome() { google-chrome --new-window "$URL" ; } ; export -f l_chrome
 
 # Define our YAD command.
 cmd=( yad
+    --no-markup
     --window-icon="applications-internet"
     #--geometry=100x160
     #--borders="15"
@@ -43,7 +50,7 @@ cmd=( yad
     #--separator=""
     --image="browser"
     --skip-taskbar
-    --text="URL = $URL"
+    --text="URL = \"$URL\""
     --form 
         --title "Choose Browser:"
         # Launchers invoked from here
@@ -52,7 +59,6 @@ cmd=( yad
         --button="Cancel!gtk-cancel"
     )
 
-pd $(printf "\n---\n%(%Y%m%d-%H%M%S)T\n---" -1)
 pd "Executing: ${cmd[@]}"
 
 # Execute YAD command
