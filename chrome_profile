@@ -1,0 +1,13 @@
+# Source - https://superuser.com/a/1663491
+# Posted by Sam Watkins, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-05-06, License - CC BY-SA 4.0
+
+#!/bin/bash -eua
+profile_name=$1; shift
+local_state=~/.config/google-chrome/Local\ State
+profile_key=`< "$local_state" jq -r '
+        .profile.info_cache | to_entries | .[] |
+        select(.value.name == env.profile_name) | .key'`
+[ -n "$profile_key" ]
+google-chrome --profile-directory="$profile_key" "$@"
+

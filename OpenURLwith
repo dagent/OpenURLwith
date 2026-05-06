@@ -51,7 +51,7 @@ l_firefox() {
         *) new_window="" ;;
     esac
     pd "Executing: firefox $private $new_window \"$URL\""
-    firefox $private $new_window "$URL" 
+    firefox $private $new_window "$URL" &
 } ; export -f l_firefox
 
 l_chrome() {
@@ -65,7 +65,7 @@ l_chrome() {
         *) new_window="" ;;
     esac
     pd "Executing: google-chrome $private $new_window \"$URL\""
-    google-chrome $private $new_window "$URL"
+    google-chrome $private $new_window "$URL" &
 } ; export -f l_chrome
 
 # Define our YAD command.
