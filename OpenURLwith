@@ -6,6 +6,7 @@ logf="/tmp/$progn.log"  # logfile
 
 DEBUG=${DEBUG:-false}
 [ "$1" = "-d" ] && { DEBUG=true ; shift ; }
+export DEBUG
 
 # check for tty, otherwise output to log file
 [ -t 1 ] || exec >> "$logf" 2>&1
@@ -25,6 +26,8 @@ _EOL_
 pd () {
     $DEBUG && echo -ne "[DEBUG] $@\n" 
 }
+export -f pd
+
 pd $(printf "\n---\n%(%Y%m%d-%H%M%S)T\n---" -1)
 
 # Basic argument Handling
@@ -37,25 +40,53 @@ esac
 pd "URL: >>>\n\t$URL\n<<<"
 
 # Launchers -- definitions
-l_firefox() { firefox --new-window "$URL" ; } ; export -f l_firefox
-l_chrome() { google-chrome --new-window "$URL" ; } ; export -f l_chrome
+l_firefox() {
+    local private="${1:-false}" new_window="${2:-true}"
+    case "$private" in
+        true|True|TRUE) private="--private-window" ; new_window="" ;;
+        *) private="" ;;
+    esac
+    case "$new_window" in
+        true|True|TRUE) new_window="--new-window" ;;
+        *) new_window="" ;;
+    esac
+    pd "Executing: firefox $private $new_window \"$URL\""
+    firefox $private $new_window "$URL" 
+} ; export -f l_firefox
+
+l_chrome() {
+    local private="${1:-false}" new_window="${2:-true}"
+    case "$private" in
+        true|True|TRUE) private="--incognito" ; new_window="" ;;
+        *) private="" ;;
+    esac
+    case "$new_window" in
+        true|True|TRUE) new_window="--new-window" ;;
+        *) new_window="" ;;
+    esac
+    pd "Executing: google-chrome $private $new_window \"$URL\""
+    google-chrome $private $new_window "$URL"
+} ; export -f l_chrome
 
 # Define our YAD command.
 cmd=( yad
     --no-markup
     --window-icon="applications-internet"
+    # Some possible Nice-to-have options:
+    #--close-on-unfocus
     #--geometry=100x160
     #--borders="15"
-    --close-on-unfocus
-    #--separator=""
     --image="browser"
     --skip-taskbar
     --text="URL = \"$URL\""
     --form 
+        --separator=" "
         --title "Choose Browser:"
+        --field "Private:CHK" "FALSE"
+        --field "New Window:CHK" "TRUE"
         # Launchers invoked from here
-        --field="Firefox!:FBTN" "bash -c 'l_firefox'"
-        --field="Chrome!:FBTN" "bash -c 'l_chrome'"
+        --field="Firefox!:FBTN" 'bash -c "l_firefox %1 %2  ; kill $YAD_PID"'
+        --field="Chrome!:FBTN"  'bash -c "l_chrome %1 %2 ; kill $YAD_PID"'
         --button="Cancel!gtk-cancel"
     )
 

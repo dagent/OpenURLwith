@@ -24,7 +24,7 @@ website with -- I use profiles in both FireFox and Chrome.
 
 Development done using Linux Mint MATE 22.3 and Debian 13 Mate.  My
 guess/hope is that any mondernish freedesktop.org "compliant"
-Linux should work.
+Linux should work. 
 
 * BASH
 * [YAD](https://github.com/v1cont/yad) -- See the yad-build-notes.md for
@@ -40,7 +40,11 @@ executable.  I leave mine in ~/bin:
 
 `cp OpenURLwith $HOME/bin; chmod 755 $HOME/bin/OpenURLwith`
 
-#### 2.  Run `OpenURLwith` from the command line -- it will open blank windows if not given a URL:
+#### 2.  Run `OpenURLwith` from the command line:
+
+It will open blank windows if not given a URL:
+
+![OpenURLwith blank](assets/OpenURLwith-blank.png)
 
 Trouble shoot this if it doesn't work!  Is **OpenURLwith** executable and in your **$PATH**?  Is YAD installed correctly?
 
