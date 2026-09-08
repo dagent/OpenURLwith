@@ -13,9 +13,7 @@ never use my FireFox for...).
 **A Solution:** Make my *default web browser* a dialog which allows me to
 pick my web application.  I'm going to call that _OpenURLwith_.
 
-###  Even more features (in the future)
-
-**Private/Guest:** Check box -- Just open in a completely non-Profile window.
+###  Todo
 
 **Profiles:** Drop down -- It would be great to select which profile to open a
 website with -- I use profiles in both FireFox and Chrome.
